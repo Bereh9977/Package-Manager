@@ -1,0 +1,39 @@
+package org.example.packagemanager;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class DependencyGraph
+{
+    private Map<PackageId, List<PackageId>> graph;
+
+    public DependencyGraph()
+    {
+        graph = new HashMap<>();
+    }
+
+    public void addPackage(PackageId pkg)
+    {
+        graph.putIfAbsent(pkg, new ArrayList<>());
+    }
+
+    public void addDependency(PackageId from, PackageId to)
+    {
+        graph.putIfAbsent(from, new ArrayList<>());
+        graph.putIfAbsent(to, new ArrayList<>());
+
+        graph.get(from).add(to);
+    }
+
+    public List<PackageId> getDependencies(PackageId pkg)
+    {
+        return graph.getOrDefault(pkg, new ArrayList<>());
+    }
+
+    public Map<PackageId, List<PackageId>> getGraph()
+    {
+        return graph;
+    }
+}
