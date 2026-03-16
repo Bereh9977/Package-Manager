@@ -1,0 +1,11 @@
+package: auth-module, v1.0
+requires: logger, v2.1
+requires: database-connector, v1.5
+
+package: logger, v2.1
+requires: system-utils, v1.0
+
+package: database-connector, v1.5
+requires: system-utils, v1.0
+
+package: system-utils, v1.0
