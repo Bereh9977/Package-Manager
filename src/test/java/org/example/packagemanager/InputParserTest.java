@@ -8,8 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class InputParserTest
 {
     @Test
-    void shouldParseValidInput()
-            throws PackageManagerException
+    void shouldParseValidInput() throws PackageManagerException
     {
         InputParser parser = new InputParser();
 
