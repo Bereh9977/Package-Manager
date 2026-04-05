@@ -16,7 +16,6 @@ public class Main
 
         try
         {
-
             InputReader reader = new InputReader();
             List<String> lines = reader.readFile(filePath);
 
@@ -27,23 +26,55 @@ public class Main
 
             if (validator.hasCycle(graph))
             {
-
                 ReportGenerator report = new ReportGenerator();
                 report.printCycleError();
-
-            } else
+            }
+            else
             {
-
                 ResolverEngine resolver = new ResolverEngine();
                 List<PackageId> order = resolver.topologicalSort(graph);
 
                 ReportGenerator report = new ReportGenerator();
                 report.printInstallOrder(order);
             }
-
-        } catch (Exception e)
+        }
+        catch (PackageManagerException e)
         {
-            System.out.println("Error: " + e.getMessage());
+            printFormattedError(e);
+        }
+        catch (Exception e)
+        {
+            System.out.println(
+                    "Error: UnexpectedException - " + e.getMessage()
+            );
+        }
+    }
+
+    private static void printFormattedError(PackageManagerException exception)
+    {
+        String errorType = exception.getClass().getSimpleName();
+        String message = exception.getMessage();
+        int lineNumber = exception.getLineNumber();
+
+        if (lineNumber > 0)
+        {
+            System.out.println(
+                    "Error: "
+                            + errorType
+                            + " - "
+                            + message
+                            + " at line "
+                            + lineNumber
+            );
+        }
+        else
+        {
+            System.out.println(
+                    "Error: "
+                            + errorType
+                            + " - "
+                            + message
+            );
         }
     }
 }
