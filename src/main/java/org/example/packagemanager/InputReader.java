@@ -7,8 +7,15 @@ import java.util.List;
 
 public class InputReader
 {
-    public List<String> readFile(String path) throws IOException
+    public List<String> readFile(String path) throws FileSystemException
     {
-        return Files.readAllLines(Path.of(path));
+        try
+        {
+            return Files.readAllLines(Path.of(path));
+        }
+        catch (IOException e)
+        {
+            throw new FileSystemException("Cannot read file: " + path);
+        }
     }
 }
