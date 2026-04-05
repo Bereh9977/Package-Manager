@@ -1,6 +1,8 @@
 package org.example.packagemanager;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class InputParser
@@ -11,6 +13,7 @@ public class InputParser
     {
         DependencyGraph graph = new DependencyGraph();
         PackageId currentPackage = null;
+        Map<PackageId, Integer> dependencyLines = new HashMap<>();
 
         for (int i = 0; i < lines.size(); i++)
         {
@@ -48,6 +51,7 @@ public class InputParser
                 );
 
                 graph.addDependency(currentPackage, dependency);
+                dependencyLines.put(dependency, lineNumber);
             }
             else
             {
@@ -57,6 +61,8 @@ public class InputParser
                 );
             }
         }
+
+        validateDependencies(graph, dependencyLines);
 
         return graph;
     }
@@ -98,5 +104,35 @@ public class InputParser
         }
 
         return new PackageId(name, version);
+    }
+
+    private void validateDependencies(
+            DependencyGraph graph,
+            Map<PackageId, Integer> dependencyLines
+    ) throws MissingDependencyException
+    {
+        for (PackageId pkg : graph.getGraph().keySet())
+        {
+            List<PackageId> dependencies = graph.getDependencies(pkg);
+
+            for (PackageId dependency : dependencies)
+            {
+                if (!graph.containsPackage(dependency))
+                {
+                    int lineNumber = dependencyLines.getOrDefault(
+                            dependency,
+                            -1
+                    );
+
+                    throw new MissingDependencyException(
+                            "Missing dependency: "
+                                    + dependency.getName()
+                                    + " "
+                                    + dependency.getVersion(),
+                            lineNumber
+                    );
+                }
+            }
+        }
     }
 }

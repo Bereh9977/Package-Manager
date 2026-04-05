@@ -22,9 +22,12 @@ public class DependencyGraph
     public void addDependency(PackageId from, PackageId to)
     {
         graph.putIfAbsent(from, new ArrayList<>());
-        graph.putIfAbsent(to, new ArrayList<>());
-
         graph.get(from).add(to);
+    }
+
+    public boolean containsPackage(PackageId pkg)
+    {
+        return graph.containsKey(pkg);
     }
 
     public List<PackageId> getDependencies(PackageId pkg)
