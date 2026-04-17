@@ -15,3 +15,9 @@
 - mvn checkstyle:check
 
 <img width="1005" height="494" alt="image" src="https://github.com/user-attachments/assets/0d94c362-c8ac-4db9-a570-6b825a05e334" />
+
+4) Для запуску тестів відкрийте cmd в проекті, поряд з файлом pom.xml та виконайте команду:
+- mvn test
+
+5) Для створення звіту про виконання тестів відкрийте cmd в проекті, поряд з файлом pom.xml та виконайте команду:
+- mvn verify
