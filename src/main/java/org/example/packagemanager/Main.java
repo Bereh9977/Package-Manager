@@ -22,9 +22,18 @@ public class Main
             InputParser parser = new InputParser();
             DependencyGraph graph = parser.parse(lines);
 
+            ConfigReader configReader = new ConfigReader();
+            ResolutionConfig config = configReader.readConfig("config.json");
+
+            ResolutionStrategyFactory factory = new ResolutionStrategyFactory();
+            IResolutionStrategy strategy = factory.createStrategy(config);
+
+            ConflictResolver conflictResolver = new ConflictResolver(strategy);
+            DependencyGraph resolvedGraph = conflictResolver.resolveConflicts(graph);
+
             ValidationEngine validator = new ValidationEngine();
 
-            if (validator.hasCycle(graph))
+            if (validator.hasCycle(resolvedGraph))
             {
                 ReportGenerator report = new ReportGenerator();
                 report.printCycleError();
@@ -32,7 +41,7 @@ public class Main
             else
             {
                 ResolverEngine resolver = new ResolverEngine();
-                List<PackageId> order = resolver.topologicalSort(graph);
+                List<PackageId> order = resolver.topologicalSort(resolvedGraph);
 
                 ReportGenerator report = new ReportGenerator();
                 report.printInstallOrder(order);
