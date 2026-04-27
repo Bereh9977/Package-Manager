@@ -1,7 +1,11 @@
-target
+target/
 .git
+.gitignore
+.github
+docs/
+*.pdf
+*.md
 .idea
 *.iml
 *.log
-README.md
-out
+out/
